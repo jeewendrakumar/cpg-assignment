@@ -1,16 +1,17 @@
 <template>
   <div>
     <!-- <h2>Create a Poll</h2> -->
-    <section class="poll-question">
-      <label>Poll Question</label>
+    <section class="poll-question form-group">
+      <h5 class="card-title">Poll Question</h5>
       <input
         type="text"
+        class="form-control"
+        :maxlength="maxLength"
         v-model.trim="poll.question"
         placeholder="Type a question?"
       />
     </section>
-    <section class="poll-options">
-      <label>Add Poll Options</label>
+    <section class="form-group cb-height">
       <div
         class="poll-options__remove"
         v-for="(option, index) in poll.optionsList"
@@ -18,26 +19,36 @@
       >
         <input
           type="text"
+          class="form-control"
           name="options"
           v-model="option.value"
           v-bind:disabled="true"
         />
-        <button type="submit" @click="removePollOption(index)">Remove</button>
+        <button
+          type="submit"
+          class="btn btn-danger close"
+          @click="removePollOption(index)"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="poll-options__add">
+      <div class="poll-options__add form-group">
         <input
           type="text"
+          class="form-control"
           name="options"
           placeholder="Type an answer"
           v-model.trim="pollOption"
           @keyup.enter="addPollOption"
+          :maxlength="maxLength"
           :disabled="
             poll.optionsList.length == limitPollOption || !poll.question
           "
         />
         <button
           type="submit"
-          @click="addPollOption"
+          class="btn btn-success"
+          @click="addPoll"
           :disabled="!poll.question || !pollOption"
         >
           Add
@@ -47,11 +58,12 @@
     <section class="poll-create__btn">
       <label v-html="getOptionLimit"></label>
       <button
-        @click="createPoll"
-        v-html="btnName"
+        @click="resetPoll"
         class="btn btn-primary"
         :disabled="!poll.optionsList.length"
-      ></button>
+      >
+        Reset
+      </button>
     </section>
   </div>
 </template>
@@ -60,17 +72,17 @@
 export default {
   data() {
     return {
+      maxLength: 80,
       poll: {
         question: "",
         optionsList: [],
       },
       pollOption: "",
       limitPollOption: 10,
-      btnName: "Add Poll",
     };
   },
   methods: {
-    addPollOption() {
+    addPoll() {
       //check for duplicate poll option
       const existingValue = this.poll.optionsList.find(
         (item) => item.value === this.pollOption
@@ -86,23 +98,20 @@ export default {
       };
 
       this.poll.optionsList.push(options);
+      this.$emit("poll-data", {
+        QUESTION: this.poll.question,
+        OPTIONS: this.poll.optionsList,
+      });
       this.pollOption = "";
     },
     removePollOption(index) {
       this.poll.optionsList.splice(index, 1);
     },
-    createPoll() {
-      if (this.btnName === "Reset") {
-        this.poll = {
-          question: "",
-          optionsList: [],
-        };
-      }
-      if (!this.poll.optionsList.length) {
-        console.log("executed");
-        this.btnName = "Reset";
-      }
-      this.btnName = this.btnName === "Add Poll" ? "Reset" : "Add Poll";
+    resetPoll() {
+      this.poll = {
+        question: "",
+        optionsList: [],
+      };
       this.$emit("poll-data", {
         QUESTION: this.poll.question,
         OPTIONS: this.poll.optionsList,
@@ -119,16 +128,10 @@ export default {
 
 <style scoped>
 .poll-question {
-  display: flex;
-  flex-direction: column;
-  align-items: baseline;
-  padding: 10px;
+  margin-bottom: 10px;
 }
 .poll-question input[type="text"] {
   width: 100%;
-}
-.poll-options {
-  padding: 10px;
 }
 .poll-options__add,
 .poll-options__remove {
@@ -144,6 +147,6 @@ export default {
 .poll-create__btn {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
+  align-items: center;
 }
 </style>

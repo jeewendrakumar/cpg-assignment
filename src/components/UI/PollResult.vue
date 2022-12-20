@@ -1,5 +1,8 @@
 <template>
-  <BarChart :pollData="pollData" :voteData="voteData" />
+  <h5 class="card-title">{{ pollData.QUESTION }}</h5>
+  <section class="poll-result cb-height">
+    <BarChart :pollData="pollData" :voteData="voteData" />
+  </section>
   <section class="total-votes">
     <label v-bind:innerHTML="getTotalVotes"></label>
   </section>
@@ -12,15 +15,10 @@ export default {
   props: ["voteData", "pollData"],
   computed: {
     getTotalVotes() {
-      console.log(this.voteData);
       return `Total Votes: ${this.voteData.length}`;
     },
   },
 };
 </script>
 
-<style scoped>
-.total-votes {
-  display: flex;
-}
-</style>
+<style scoped></style>

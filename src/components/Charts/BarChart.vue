@@ -68,6 +68,7 @@ export default {
         },
         plugins: {
           legend: {
+            display: false,
             labels: {
               boxWidth: 0,
               font: {
@@ -92,8 +93,8 @@ export default {
   },
   computed: {
     chartData() {
-      console.log(this.pollData);
-      console.log(this.voteData);
+      //   console.log(this.pollData);
+      //   console.log(this.voteData);
       //const labels = this.pollData.OPTIONS.map((opt) => opt.value);
       const datasetLabel = this.pollData.QUESTION;
       const voteObj = this.voteData.reduce((counts, element) => {
@@ -105,6 +106,7 @@ export default {
       console.log(vote, occurence);
       return {
         labels: vote,
+        backgroundColor: "#f87979",
         datasets: [
           {
             label: datasetLabel,

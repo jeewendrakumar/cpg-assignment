@@ -1,16 +1,23 @@
 <template>
   <form class="poll-form" @submit.prevent="vote">
-    <h2>{{ pollQuestion }}</h2>
-    <label
-      class="poll-form__input"
-      v-for="option in pollOptions"
-      :key="option.value"
-    >
-      <input type="radio" :value="option.value" v-model="selectedOption" />
-      {{ option.value }}
-    </label>
-    <section class="vote__btn">
-      <button type="submit">Vote</button>
+    <h5 class="card-title">{{ pollQuestion }}</h5>
+    <section class="cb-height poll-section">
+      <div class="form-check" v-for="option in pollOptions" :key="option.value">
+        <label class="form-check-label">
+          <input
+            type="radio"
+            class="form-check-input"
+            :value="option.value"
+            v-model="selectedOption"
+          />
+          {{ option.value }}
+        </label>
+      </div>
+    </section>
+    <section class="vote-btn clearfix">
+      <button type="submit" class="btn btn-primary" :disabled="!selectedOption">
+        Vote
+      </button>
     </section>
   </form>
 </template>
@@ -26,7 +33,6 @@ export default {
   },
   methods: {
     vote() {
-      console.log(this.selectedOption);
       this.totalVotes.push(this.selectedOption);
       this.$emit("poll-result", { result: this.totalVotes });
     },
@@ -34,15 +40,8 @@ export default {
 };
 </script>
 <style scoped>
-.poll-form {
+.vote-btn {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.poll-form__input {
-  display: flex;
-}
-.vote__btn {
-  align-items: flex-end;
+  justify-content: right;
 }
 </style>
