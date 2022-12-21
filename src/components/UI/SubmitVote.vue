@@ -2,20 +2,34 @@
   <form class="poll-form" @submit.prevent="vote">
     <h5 class="card-title">{{ pollQuestion }}</h5>
     <section class="cb-height poll-section">
-      <div class="form-check" v-for="option in pollOptions" :key="option.value">
-        <label class="form-check-label">
-          <input
-            type="radio"
-            class="form-check-input"
-            :value="option.value"
-            v-model="selectedOption"
-          />
-          {{ option.value }}
-        </label>
-      </div>
+      <transition-group name="list" tag="p">
+        <div
+          class="form-check list-item"
+          v-for="option in pollOptions"
+          :key="option.value"
+        >
+          <label class="form-check-label">
+            <input
+              type="radio"
+              class="form-check-input"
+              :value="option.value"
+              v-model="selectedOption"
+            />
+            {{ option.value }}
+          </label>
+        </div>
+      </transition-group>
     </section>
     <section class="vote-btn clearfix">
-      <button type="submit" class="btn btn-primary" :disabled="!selectedOption">
+      <button
+        type="submit"
+        :class="{
+          btn: true,
+          'btn-primary': selectedOption,
+          'btn-secondary': !selectedOption,
+        }"
+        :disabled="!selectedOption"
+      >
         Vote
       </button>
     </section>

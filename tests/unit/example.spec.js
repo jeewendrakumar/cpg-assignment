@@ -1,10 +1,10 @@
 import { shallowMount } from '@vue/test-utils'
-import HeaderComponent from '@/components/UI/layout/HeaderComponent'
+import TheHeader from '@/components/UI/layout/TheHeader'
 
-describe('HeaderComponent.vue', () => {
+describe('TheHeader.vue', () => {
   it('renders props.msg when passed', () => {
     const msg = 'Sir Vote-a-lot'
-    const wrapper = shallowMount(HeaderComponent, {
+    const wrapper = shallowMount(TheHeader, {
       props: { msg }
     })
     expect(wrapper.text()).toMatch(msg)

@@ -1,19 +1,18 @@
 <template>
-  <div>
-    <!-- <h2>Create a Poll</h2> -->
-    <section class="poll-question form-group">
-      <h5 class="card-title">Poll Question</h5>
-      <input
-        type="text"
-        class="form-control"
-        :maxlength="maxLength"
-        v-model.trim="poll.question"
-        placeholder="Type a question?"
-      />
-    </section>
-    <section class="form-group cb-height">
+  <section class="poll-question form-group">
+    <h5 class="card-title">Create a Poll</h5>
+    <input
+      type="text"
+      class="form-control"
+      :maxlength="maxLength"
+      v-model.trim="poll.question"
+      placeholder="Type a question?"
+    />
+  </section>
+  <section class="form-group cb-height">
+    <transition-group name="list" tag="p">
       <div
-        class="poll-options__remove"
+        class="poll-options__remove list-item"
         v-for="(option, index) in poll.optionsList"
         :key="index"
       >
@@ -27,49 +26,51 @@
         <button
           type="submit"
           class="btn btn-danger close"
+          aria-label="Close"
           @click="removePollOption(index)"
         >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="poll-options__add form-group">
-        <input
-          type="text"
-          class="form-control"
-          name="options"
-          placeholder="Type an answer"
-          v-model.trim="pollOption"
-          @keyup.enter="addPollOption"
-          :maxlength="maxLength"
-          :disabled="
-            poll.optionsList.length == limitPollOption || !poll.question
-          "
-        />
-        <button
-          type="submit"
-          class="btn btn-success"
-          @click="addPoll"
-          :disabled="!poll.question || !pollOption"
-        >
-          Add
-        </button>
-      </div>
-    </section>
-    <section class="poll-create__btn">
-      <label v-html="getOptionLimit"></label>
+    </transition-group>
+    <div class="poll-options__add form-group">
+      <input
+        type="text"
+        class="form-control"
+        name="options"
+        placeholder="Type an answer"
+        v-model.trim="pollOption"
+        @keyup.enter="addPollOption"
+        :maxlength="maxLength"
+        :disabled="poll.optionsList.length == limitPollOption || !poll.question"
+      />
       <button
-        @click="resetPoll"
-        class="btn btn-primary"
-        :disabled="!poll.optionsList.length"
+        type="submit"
+        :class="{
+          btn: true,
+          add: true,
+          'btn-success': poll.question && pollOption,
+          'btn-secondary': !poll.question || !pollOption,
+        }"
+        aria-label="Add"
+        @click="addPoll"
+        :disabled="!poll.question || !pollOption"
       >
-        Reset
+        Add
       </button>
-    </section>
-  </div>
+    </div>
+  </section>
+  <section class="poll-create__btn">
+    <label v-html="getOptionLimit"></label>
+    <button @click="resetPoll" class="btn btn-primary reset" aria-label="Reset">
+      Reset
+    </button>
+  </section>
 </template>
 
 <script>
 export default {
+  emits: ["poll-data"],
   data() {
     return {
       maxLength: 80,
@@ -136,13 +137,14 @@ export default {
 .poll-options__add,
 .poll-options__remove {
   display: flex;
-  align-items: center;
   margin-bottom: 10px;
 }
 .poll-options__add input[type="text"],
 .poll-options__remove input[type="text"] {
-  flex: 1;
   margin-right: 8px;
+}
+.close {
+  width: 64px;
 }
 .poll-create__btn {
   display: flex;

@@ -1,5 +1,5 @@
 <template>
-  <HeaderComponent></HeaderComponent>
+  <TheHeader></TheHeader>
   <div class="container-fluid">
     <div class="row">
       <Transition name="fade" mode="out-in">
@@ -41,13 +41,14 @@
 </template>
 
 <script>
-import HeaderComponent from "./components/UI/layout/HeaderComponent.vue";
+import TheHeader from "./components/UI/layout/TheHeader.vue";
 import CreatePoll from "./components/UI/CreatePoll.vue";
 import PollResult from "./components/UI/PollResult.vue";
 import SubmitVote from "./components/UI/SubmitVote.vue";
+
 export default {
   name: "App",
-  components: { CreatePoll, PollResult, SubmitVote, HeaderComponent },
+  components: { CreatePoll, PollResult, SubmitVote, TheHeader },
   data() {
     return {
       poll: {},
@@ -79,6 +80,9 @@ body {
   padding: 0;
   height: 100%;
 }
+.card-body {
+  border-bottom: 4px solid rgb(23, 171, 218);
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -91,5 +95,25 @@ body {
 
 .cb-height {
   min-height: 275px;
+}
+
+/* 1. declare transition */
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. declare enter from and leave to state */
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
 }
 </style>
