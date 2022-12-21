@@ -75,6 +75,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: rgb(204 204 204 / 30%);
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 .fade-enter-active,
 .fade-leave-active {
