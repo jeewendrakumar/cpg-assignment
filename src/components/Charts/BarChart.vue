@@ -106,13 +106,15 @@ export default {
       console.log(vote, occurence);
       return {
         labels: vote,
-        backgroundColor: "#f87979",
         datasets: [
           {
             label: datasetLabel,
             data: occurence,
             barPercentage: 1.0,
             categoryPercentage: 1.0,
+            backgroundColor: "rgb(23, 171, 218)",
+            borderColor: "#fff",
+            borderWidth: 1,
           },
         ],
       };

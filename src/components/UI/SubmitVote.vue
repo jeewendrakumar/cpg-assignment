@@ -25,10 +25,10 @@
         type="submit"
         :class="{
           btn: true,
-          'btn-primary': selectedOption,
-          'btn-secondary': !selectedOption,
+          'btn-primary': pollOptions.length || selectedOption,
+          'btn-secondary': !pollOptions.length || !selectedOption,
         }"
-        :disabled="!selectedOption"
+        :disabled="!pollOptions.length || !selectedOption"
       >
         Vote
       </button>

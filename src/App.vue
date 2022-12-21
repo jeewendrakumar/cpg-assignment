@@ -12,12 +12,12 @@
         </div>
       </Transition>
       <Transition name="fade" mode="out-in">
-        <div v-if="poll.QUESTION" class="col-sm-6 col-md-4">
+        <div v-if="poll.question" class="col-sm-6 col-md-4">
           <div class="card mb-4">
             <div class="card-body cb-height">
               <SubmitVote
-                :poll-question="poll.QUESTION"
-                :poll-options="poll.OPTIONS"
+                :poll-question="poll.question"
+                :poll-options="poll.options"
                 @poll-result="getPollResults"
               ></SubmitVote>
             </div>
@@ -61,7 +61,6 @@ export default {
       this.poll = pollData;
     },
     getPollResults(poll) {
-      console.log(poll);
       this.selectedOption = poll.result;
     },
   },

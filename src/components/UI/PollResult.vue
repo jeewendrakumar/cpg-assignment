@@ -1,5 +1,5 @@
 <template>
-  <h5 class="card-title">{{ pollData.QUESTION }}</h5>
+  <h5 class="card-title">{{ pollData.question }}</h5>
   <section class="poll-result cb-height">
     <BarChart :pollData="pollData" :voteData="voteData" />
   </section>

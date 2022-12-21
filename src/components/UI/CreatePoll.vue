@@ -13,7 +13,7 @@
     <transition-group name="list" tag="p">
       <div
         class="poll-options__remove list-item"
-        v-for="(option, index) in poll.optionsList"
+        v-for="(option, index) in poll.options"
         :key="index"
       >
         <input
@@ -21,7 +21,6 @@
           class="form-control"
           name="options"
           v-model="option.value"
-          v-bind:disabled="true"
         />
         <button
           type="submit"
@@ -42,7 +41,7 @@
         v-model.trim="pollOption"
         @keyup.enter="addPollOption"
         :maxlength="maxLength"
-        :disabled="poll.optionsList.length == limitPollOption || !poll.question"
+        :disabled="poll.options.length == limitPollOption || !poll.question"
       />
       <button
         type="submit"
@@ -76,7 +75,7 @@ export default {
       maxLength: 80,
       poll: {
         question: "",
-        optionsList: [],
+        options: [],
       },
       pollOption: "",
       limitPollOption: 10,
@@ -85,7 +84,7 @@ export default {
   methods: {
     addPoll() {
       //check for duplicate poll option
-      const existingValue = this.poll.optionsList.find(
+      const existingValue = this.poll.options.find(
         (item) => item.value === this.pollOption
       );
       if (existingValue) {
@@ -98,30 +97,24 @@ export default {
         value: this.pollOption,
       };
 
-      this.poll.optionsList.push(options);
-      this.$emit("poll-data", {
-        QUESTION: this.poll.question,
-        OPTIONS: this.poll.optionsList,
-      });
+      this.poll.options.push(options);
+      this.$emit("poll-data", this.poll);
       this.pollOption = "";
     },
     removePollOption(index) {
-      this.poll.optionsList.splice(index, 1);
+      this.poll.options.splice(index, 1);
     },
     resetPoll() {
       this.poll = {
         question: "",
-        optionsList: [],
+        options: [],
       };
-      this.$emit("poll-data", {
-        QUESTION: this.poll.question,
-        OPTIONS: this.poll.optionsList,
-      });
+      this.$emit("poll-data", this.poll);
     },
   },
   computed: {
     getOptionLimit() {
-      return `${this.poll.optionsList.length}/${this.limitPollOption} possible answers`;
+      return `${this.poll.options.length}/${this.limitPollOption} possible answers`;
     },
   },
 };
