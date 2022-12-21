@@ -4,8 +4,8 @@
     <input
       type="text"
       class="form-control"
-      :maxlength="maxLength"
-      v-model.trim="poll.question"
+      :maxlength="$store.state.maxLength"
+      v-model.trim="$store.state.poll.question"
       placeholder="Type a question?"
     />
   </section>
@@ -13,7 +13,7 @@
     <transition-group name="list" tag="p">
       <div
         class="poll-options__remove list-item"
-        v-for="(option, index) in poll.options"
+        v-for="(option, index) in $store.state.poll.options"
         :key="index"
       >
         <input
@@ -21,6 +21,7 @@
           class="form-control"
           name="options"
           v-model="option.value"
+          :maxlength="$store.state.maxLength"
         />
         <button
           type="submit"
@@ -38,22 +39,27 @@
         class="form-control"
         name="options"
         placeholder="Type an answer"
-        v-model.trim="pollOption"
-        @keyup.enter="addPollOption"
-        :maxlength="maxLength"
-        :disabled="poll.options.length == limitPollOption || !poll.question"
+        v-model.trim="$store.state.pollOptionInput"
+        @keyup.enter="addPoll"
+        :maxlength="$store.state.maxLength"
+        :disabled="
+          $store.state.poll.options.length == $store.state.limitPollOption ||
+          !$store.state.poll.question
+        "
       />
       <button
         type="submit"
         :class="{
           btn: true,
           add: true,
-          'btn-success': poll.question && pollOption,
-          'btn-secondary': !poll.question || !pollOption,
+          'btn-success':
+            $store.state.poll.question && $store.state.pollOptionInput,
+          'btn-secondary':
+            !$store.state.poll.question || !$store.state.pollOptionInput,
         }"
         aria-label="Add"
         @click="addPoll"
-        :disabled="!poll.question || !pollOption"
+        :disabled="!$store.state.poll.question || !$store.state.pollOptionInput"
       >
         Add
       </button>
@@ -69,52 +75,23 @@
 
 <script>
 export default {
-  emits: ["poll-data"],
-  data() {
-    return {
-      maxLength: 80,
-      poll: {
-        question: "",
-        options: [],
-      },
-      pollOption: "",
-      limitPollOption: 10,
-    };
-  },
   methods: {
     addPoll() {
-      //check for duplicate poll option
-      const existingValue = this.poll.options.find(
-        (item) => item.value === this.pollOption
-      );
-      if (existingValue) {
-        alert("No Duplicates Allowed!");
-        this.pollOption = "";
-        return;
-      }
-
-      const options = {
-        value: this.pollOption,
-      };
-
-      this.poll.options.push(options);
-      this.$emit("poll-data", this.poll);
-      this.pollOption = "";
+      this.$store.commit("createPoll");
     },
     removePollOption(index) {
-      this.poll.options.splice(index, 1);
+      this.$store.commit({
+        type: "removePollOption",
+        value: index,
+      });
     },
     resetPoll() {
-      this.poll = {
-        question: "",
-        options: [],
-      };
-      this.$emit("poll-data", this.poll);
+      this.$store.commit("resetPoll");
     },
   },
   computed: {
     getOptionLimit() {
-      return `${this.poll.options.length}/${this.limitPollOption} possible answers`;
+      return this.$store.getters.getOptionLimit;
     },
   },
 };

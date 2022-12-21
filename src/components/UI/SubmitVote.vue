@@ -1,11 +1,11 @@
 <template>
   <form class="poll-form" @submit.prevent="vote">
-    <h5 class="card-title">{{ pollQuestion }}</h5>
+    <h5 class="card-title">{{ getQuestion }}</h5>
     <section class="cb-height poll-section">
       <transition-group name="list" tag="p">
         <div
           class="form-check list-item"
-          v-for="option in pollOptions"
+          v-for="option in $store.state.poll.options"
           :key="option.value"
         >
           <label class="form-check-label">
@@ -25,10 +25,20 @@
         type="submit"
         :class="{
           btn: true,
-          'btn-primary': pollOptions.length || selectedOption,
-          'btn-secondary': !pollOptions.length || !selectedOption,
+          'btn-primary':
+            $store.state.poll.options.length ||
+            $store.state.poll.options.length > 2 ||
+            selectedOption,
+          'btn-secondary':
+            !$store.state.poll.options.length ||
+            $store.state.poll.options.length < 2 ||
+            !selectedOption,
         }"
-        :disabled="!pollOptions.length || !selectedOption"
+        :disabled="
+          !$store.state.poll.options.length ||
+          $store.state.poll.options.length < 2 ||
+          !selectedOption
+        "
       >
         Vote
       </button>
@@ -37,18 +47,23 @@
 </template>
 <script>
 export default {
-  emits: ["poll-result"],
-  props: ["pollQuestion", "pollOptions"],
   data() {
     return {
       selectedOption: null,
-      totalVotes: [],
+      // totalVotes: [],
     };
   },
   methods: {
     vote() {
-      this.totalVotes.push(this.selectedOption);
-      this.$emit("poll-result", { result: this.totalVotes });
+      this.$store.commit({
+        type: "addVote",
+        value: this.selectedOption,
+      });
+    },
+  },
+  computed: {
+    getQuestion() {
+      return this.$store.getters.getQuestion;
     },
   },
 };

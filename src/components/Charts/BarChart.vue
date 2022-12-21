@@ -93,23 +93,25 @@ export default {
   },
   computed: {
     chartData() {
-      //   console.log(this.pollData);
-      //   console.log(this.voteData);
-      //const labels = this.pollData.OPTIONS.map((opt) => opt.value);
-      const datasetLabel = this.pollData.QUESTION;
+      const data = [];
+      const question = this.pollData.question;
+      const labels = this.pollData.options.map((opt) => opt.value);
+
       const voteObj = this.voteData.reduce((counts, element) => {
         counts[element] = (counts[element] || 0) + 1;
         return counts;
       }, {});
-      const vote = Object.keys(voteObj);
-      const occurence = Object.values(voteObj);
-      console.log(vote, occurence);
+
+      labels.forEach((opt) => {
+        data.push(voteObj[opt] || 0);
+      });
+
       return {
-        labels: vote,
+        labels: labels,
         datasets: [
           {
-            label: datasetLabel,
-            data: occurence,
+            label: question,
+            data: data,
             barPercentage: 1.0,
             categoryPercentage: 1.0,
             backgroundColor: "rgb(23, 171, 218)",

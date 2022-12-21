@@ -1,7 +1,10 @@
 <template>
-  <h5 class="card-title">{{ pollData.question }}</h5>
+  <h5 class="card-title">{{ getQuestion }}</h5>
   <section class="poll-result cb-height">
-    <BarChart :pollData="pollData" :voteData="voteData" />
+    <BarChart
+      :pollData="$store.state.poll"
+      :voteData="$store.state.totalVotes"
+    />
   </section>
   <section class="total-votes">
     <label v-bind:innerHTML="getTotalVotes"></label>
@@ -9,16 +12,16 @@
 </template>
 
 <script>
-import BarChart from "../Charts/BarChart.vue";
+import BarChart from "../charts/BarChart.vue";
 export default {
   components: { BarChart },
-  props: ["voteData", "pollData"],
   computed: {
     getTotalVotes() {
-      return `Total Votes: ${this.voteData.length}`;
+      return this.$store.getters.getTotalVotes;
+    },
+    getQuestion() {
+      return this.$store.getters.getQuestion;
     },
   },
 };
 </script>
-
-<style scoped></style>

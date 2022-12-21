@@ -6,32 +6,28 @@
         <div class="col-sm-6 col-md-4">
           <div class="card mb-4">
             <div class="card-body cb-height">
-              <CreatePoll @poll-data="getPollData"></CreatePoll>
+              <CreatePoll></CreatePoll>
             </div>
           </div>
         </div>
       </Transition>
       <Transition name="fade" mode="out-in">
-        <div v-if="poll.question" class="col-sm-6 col-md-4">
+        <div
+          v-if="$store.state.poll.question && $store.state.poll.options.length"
+          class="col-sm-6 col-md-4"
+        >
           <div class="card mb-4">
             <div class="card-body cb-height">
-              <SubmitVote
-                :poll-question="poll.question"
-                :poll-options="poll.options"
-                @poll-result="getPollResults"
-              ></SubmitVote>
+              <SubmitVote></SubmitVote>
             </div>
           </div>
         </div>
       </Transition>
       <Transition name="fade" mode="out-in">
-        <div v-if="selectedOption" class="col-sm-12 col-md-4">
+        <div v-if="$store.state.totalVotes.length" class="col-sm-12 col-md-4">
           <div class="card mb-4">
             <div class="card-body cb-height">
-              <PollResult
-                :vote-data="selectedOption"
-                :poll-data="poll"
-              ></PollResult>
+              <PollResult></PollResult>
             </div>
           </div>
         </div>
@@ -51,18 +47,19 @@ export default {
   components: { CreatePoll, PollResult, SubmitVote, TheHeader },
   data() {
     return {
-      poll: {},
-      selectedOption: null,
+      // poll: {},
+      // selectedOption: null,
     };
   },
   methods: {
-    getPollData(pollData) {
-      console.log(pollData);
-      this.poll = pollData;
-    },
-    getPollResults(poll) {
-      this.selectedOption = poll.result;
-    },
+    // getPollData(pollData) {
+    //   console.log(pollData);
+    //   this.poll = pollData;
+    // },
+    // getPollResults(poll) {
+    //   console.log(poll.result);
+    //   this.$store.state.totalVotes = poll.result;
+    // },
   },
 };
 </script>
