@@ -44,7 +44,7 @@
         :maxlength="$store.state.maxLength"
         :disabled="
           $store.state.poll.options.length == $store.state.limitPollOption ||
-          !$store.state.poll.question
+          !getQuestion
         "
       />
       <button
@@ -52,14 +52,12 @@
         :class="{
           btn: true,
           add: true,
-          'btn-success':
-            $store.state.poll.question && $store.state.pollOptionInput,
-          'btn-secondary':
-            !$store.state.poll.question || !$store.state.pollOptionInput,
+          'btn-success': getQuestion && $store.state.pollOptionInput,
+          'btn-secondary': !getQuestion || !$store.state.pollOptionInput,
         }"
         aria-label="Add"
         @click="addPoll"
-        :disabled="!$store.state.poll.question || !$store.state.pollOptionInput"
+        :disabled="!getQuestion || !$store.state.pollOptionInput"
       >
         Add
       </button>
@@ -74,25 +72,13 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   methods: {
-    addPoll() {
-      this.$store.commit("createPoll");
-    },
-    removePollOption(index) {
-      this.$store.commit({
-        type: "removePollOption",
-        value: index,
-      });
-    },
-    resetPoll() {
-      this.$store.commit("resetPoll");
-    },
+    ...mapActions(["addPoll", "removePollOption", "resetPoll"]),
   },
   computed: {
-    getOptionLimit() {
-      return this.$store.getters.getOptionLimit;
-    },
+    ...mapGetters(["getOptionLimit", "getQuestion"]),
   },
 };
 </script>
@@ -100,9 +86,6 @@ export default {
 <style scoped>
 .poll-question {
   margin-bottom: 10px;
-}
-.poll-question input[type="text"] {
-  width: 100%;
 }
 .poll-options__add,
 .poll-options__remove {

@@ -45,7 +45,8 @@ ChartJS.register(
 export default {
   name: "BarChart",
   components: { Bar },
-  props: ["pollData", "voteData"],
+  emits: ["total-votes"],
+  props: ["optionsList", "pollResult"],
   data() {
     return {
       chartOptions: {
@@ -94,23 +95,28 @@ export default {
   computed: {
     chartData() {
       const data = [];
-      const question = this.pollData.question;
-      const labels = this.pollData.options.map((opt) => opt.value);
+      const labels = this.optionsList.map((opt) => opt.value);
 
-      const voteObj = this.voteData.reduce((counts, element) => {
+      const occurenceOfVotes = this.pollResult.reduce((counts, element) => {
         counts[element] = (counts[element] || 0) + 1;
         return counts;
       }, {});
 
       labels.forEach((opt) => {
-        data.push(voteObj[opt] || 0);
+        data.push(occurenceOfVotes[opt] || 0);
       });
+
+      if (data.length) {
+        const totalVotes = data.reduce((a, b) => a + b);
+        this.$emit("total-votes", { total: totalVotes });
+      } else {
+        this.$emit("total-votes", { total: 0 });
+      }
 
       return {
         labels: labels,
         datasets: [
           {
-            label: question,
             data: data,
             barPercentage: 1.0,
             categoryPercentage: 1.0,

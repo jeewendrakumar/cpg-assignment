@@ -24,7 +24,12 @@
         </div>
       </Transition>
       <Transition name="fade" mode="out-in">
-        <div v-if="$store.state.totalVotes.length" class="col-sm-12 col-md-4">
+        <div
+          v-if="
+            $store.state.totalVotes != 0 || $store.state.poll.options.length > 0
+          "
+          class="col-sm-12 col-md-4"
+        >
           <div class="card mb-4">
             <div class="card-body cb-height">
               <PollResult></PollResult>
@@ -45,22 +50,6 @@ import SubmitVote from "./components/UI/SubmitVote.vue";
 export default {
   name: "App",
   components: { CreatePoll, PollResult, SubmitVote, TheHeader },
-  data() {
-    return {
-      // poll: {},
-      // selectedOption: null,
-    };
-  },
-  methods: {
-    // getPollData(pollData) {
-    //   console.log(pollData);
-    //   this.poll = pollData;
-    // },
-    // getPollResults(poll) {
-    //   console.log(poll.result);
-    //   this.$store.state.totalVotes = poll.result;
-    // },
-  },
 };
 </script>
 

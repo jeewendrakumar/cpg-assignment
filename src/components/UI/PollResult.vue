@@ -2,8 +2,9 @@
   <h5 class="card-title">{{ getQuestion }}</h5>
   <section class="poll-result cb-height">
     <BarChart
-      :pollData="$store.state.poll"
-      :voteData="$store.state.totalVotes"
+      :optionsList="$store.state.poll.options"
+      :pollResult="$store.state.submittedVotes"
+      @total-votes="submittedVotes"
     />
   </section>
   <section class="total-votes">
@@ -13,15 +14,16 @@
 
 <script>
 import BarChart from "../charts/BarChart.vue";
+import { mapGetters } from "vuex";
 export default {
   components: { BarChart },
+  methods: {
+    submittedVotes(val) {
+      this.$store.state.totalVotes = val.total;
+    },
+  },
   computed: {
-    getTotalVotes() {
-      return this.$store.getters.getTotalVotes;
-    },
-    getQuestion() {
-      return this.$store.getters.getQuestion;
-    },
+    ...mapGetters(["getTotalVotes", "getQuestion"]),
   },
 };
 </script>

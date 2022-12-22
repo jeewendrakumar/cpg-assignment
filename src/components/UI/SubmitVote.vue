@@ -1,5 +1,5 @@
 <template>
-  <form class="poll-form" @submit.prevent="vote">
+  <form class="poll-form" @submit.prevent="addVote(selectedOption)">
     <h5 class="card-title">{{ getQuestion }}</h5>
     <section class="cb-height poll-section">
       <transition-group name="list" tag="p">
@@ -46,25 +46,18 @@
   </form>
 </template>
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
       selectedOption: null,
-      // totalVotes: [],
     };
   },
   methods: {
-    vote() {
-      this.$store.commit({
-        type: "addVote",
-        value: this.selectedOption,
-      });
-    },
+    ...mapActions(["addVote"]),
   },
   computed: {
-    getQuestion() {
-      return this.$store.getters.getQuestion;
-    },
+    ...mapGetters(["getQuestion"]),
   },
 };
 </script>
