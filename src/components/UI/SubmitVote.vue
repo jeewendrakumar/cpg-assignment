@@ -5,7 +5,7 @@
       <transition-group name="list" tag="p">
         <div
           class="form-check list-item"
-          v-for="option in $store.state.poll.options"
+          v-for="option in getOptions"
           :key="option.value"
         >
           <label class="form-check-label">
@@ -20,25 +20,22 @@
         </div>
       </transition-group>
     </section>
-    <section class="vote-btn clearfix">
+    <section
+      :class="{
+        'vote-btn': true,
+        'vote-btn-right': true,
+      }"
+    >
       <button
         type="submit"
         :class="{
           btn: true,
           'btn-primary':
-            $store.state.poll.options.length ||
-            $store.state.poll.options.length > 2 ||
-            selectedOption,
+            getOptionsLength || getOptionsLength > 2 || selectedOption,
           'btn-secondary':
-            !$store.state.poll.options.length ||
-            $store.state.poll.options.length < 2 ||
-            !selectedOption,
+            !getOptionsLength || getOptionsLength < 2 || !selectedOption,
         }"
-        :disabled="
-          !$store.state.poll.options.length ||
-          $store.state.poll.options.length < 2 ||
-          !selectedOption
-        "
+        :disabled="!getOptionsLength || getOptionsLength < 2 || !selectedOption"
       >
         Vote
       </button>
@@ -47,6 +44,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -57,13 +55,19 @@ export default {
     ...mapActions(["addVote"]),
   },
   computed: {
-    ...mapGetters(["getQuestion"]),
+    ...mapGetters(["getQuestion", "getOptions", "getOptionsLength"]),
   },
 };
 </script>
 <style scoped>
 .vote-btn {
   display: flex;
+}
+.vote-btn-right {
   justify-content: right;
+}
+.vote-btn-justify {
+  justify-content: space-between;
+  align-items: baseline;
 }
 </style>

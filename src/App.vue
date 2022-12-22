@@ -1,5 +1,6 @@
 <template>
   <TheHeader></TheHeader>
+  <TheAlert v-if="showMessage" :message="getSuccessMsg"></TheAlert>
   <div class="container-fluid">
     <div class="row">
       <Transition name="fade" mode="out-in">
@@ -12,10 +13,7 @@
         </div>
       </Transition>
       <Transition name="fade" mode="out-in">
-        <div
-          v-if="$store.state.poll.question && $store.state.poll.options.length"
-          class="col-sm-6 col-md-4"
-        >
+        <div v-if="getQuestion && getOptionsLength" class="col-sm-6 col-md-4">
           <div class="card mb-4">
             <div class="card-body cb-height">
               <SubmitVote></SubmitVote>
@@ -25,9 +23,7 @@
       </Transition>
       <Transition name="fade" mode="out-in">
         <div
-          v-if="
-            $store.state.totalVotes != 0 || $store.state.poll.options.length > 0
-          "
+          v-if="getTotalVotes != 0 || getOptionsLength > 0"
           class="col-sm-12 col-md-4"
         >
           <div class="card mb-4">
@@ -46,10 +42,22 @@ import TheHeader from "./components/UI/layout/TheHeader.vue";
 import CreatePoll from "./components/UI/CreatePoll.vue";
 import PollResult from "./components/UI/PollResult.vue";
 import SubmitVote from "./components/UI/SubmitVote.vue";
+import TheAlert from "./components/UI/alerts/TheAlert.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
-  components: { CreatePoll, PollResult, SubmitVote, TheHeader },
+  components: { CreatePoll, PollResult, SubmitVote, TheHeader, TheAlert },
+  computed: {
+    ...mapGetters([
+      "getQuestion",
+      "getOptions",
+      "getTotalVotes",
+      "getOptionsLength",
+      "getSuccessMsg",
+      "showMessage",
+    ]),
+  },
 };
 </script>
 
@@ -65,9 +73,6 @@ body {
   padding: 0;
   height: 100%;
 }
-.card-body {
-  border-bottom: 4px solid rgb(23, 171, 218);
-}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -80,6 +85,14 @@ body {
 
 .cb-height {
   min-height: 275px;
+}
+
+.card-body {
+  border-bottom: 4px solid rgb(23, 171, 218);
+}
+.card-title {
+  border-bottom: 4px solid #28a745;
+  padding: 10px 0;
 }
 
 /* 1. declare transition */

@@ -45,7 +45,6 @@ ChartJS.register(
 export default {
   name: "BarChart",
   components: { Bar },
-  emits: ["total-votes"],
   props: ["optionsList", "pollResult"],
   data() {
     return {
@@ -106,12 +105,16 @@ export default {
         data.push(occurenceOfVotes[opt] || 0);
       });
 
+      let totalVotes = 0;
+
       if (data.length) {
-        const totalVotes = data.reduce((a, b) => a + b);
-        this.$emit("total-votes", { total: totalVotes });
-      } else {
-        this.$emit("total-votes", { total: 0 });
+        totalVotes = data.reduce((a, b) => a + b);
       }
+
+      this.$store.dispatch({
+        type: "totalVotesSubmitted",
+        total: totalVotes,
+      });
 
       return {
         labels: labels,

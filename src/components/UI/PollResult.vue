@@ -1,14 +1,10 @@
 <template>
   <h5 class="card-title">{{ getQuestion }}</h5>
   <section class="poll-result cb-height">
-    <BarChart
-      :optionsList="$store.state.poll.options"
-      :pollResult="$store.state.submittedVotes"
-      @total-votes="submittedVotes"
-    />
+    <BarChart :optionsList="getOptions" :pollResult="getSubmittedVotesList" />
   </section>
   <section class="total-votes">
-    <label v-bind:innerHTML="getTotalVotes"></label>
+    <h5 v-bind:innerHTML="getTotalVotesMessage"></h5>
   </section>
 </template>
 
@@ -18,12 +14,17 @@ import { mapGetters } from "vuex";
 export default {
   components: { BarChart },
   methods: {
-    submittedVotes(val) {
-      this.$store.state.totalVotes = val.total;
+    submittedVotes(votes) {
+      this.$store.dispatch({ type: "totalVotesSubmitted", total: votes.total });
     },
   },
   computed: {
-    ...mapGetters(["getTotalVotes", "getQuestion"]),
+    ...mapGetters([
+      "getQuestion",
+      "getOptions",
+      "getTotalVotesMessage",
+      "getSubmittedVotesList",
+    ]),
   },
 };
 </script>

@@ -4,7 +4,7 @@
     <input
       type="text"
       class="form-control"
-      :maxlength="$store.state.maxLength"
+      :maxlength="getCharacterLength"
       v-model.trim="$store.state.poll.question"
       placeholder="Type a question?"
     />
@@ -13,7 +13,7 @@
     <transition-group name="list" tag="p">
       <div
         class="poll-options__remove list-item"
-        v-for="(option, index) in $store.state.poll.options"
+        v-for="(option, index) in getOptions"
         :key="index"
       >
         <input
@@ -21,7 +21,7 @@
           class="form-control"
           name="options"
           v-model="option.value"
-          :maxlength="$store.state.maxLength"
+          :maxlength="getCharacterLength"
         />
         <button
           type="submit"
@@ -41,30 +41,27 @@
         placeholder="Type an answer"
         v-model.trim="$store.state.pollOptionInput"
         @keyup.enter="addPoll"
-        :maxlength="$store.state.maxLength"
-        :disabled="
-          $store.state.poll.options.length == $store.state.limitPollOption ||
-          !getQuestion
-        "
+        :maxlength="getCharacterLength"
+        :disabled="getOptionsLength == getAllowedOptionLimit || !getQuestion"
       />
       <button
         type="submit"
         :class="{
           btn: true,
           add: true,
-          'btn-success': getQuestion && $store.state.pollOptionInput,
-          'btn-secondary': !getQuestion || !$store.state.pollOptionInput,
+          'btn-success': getQuestion && getOptionInput,
+          'btn-secondary': !getQuestion || !getOptionInput,
         }"
         aria-label="Add"
         @click="addPoll"
-        :disabled="!getQuestion || !$store.state.pollOptionInput"
+        :disabled="!getQuestion || !getOptionInput"
       >
         Add
       </button>
     </div>
   </section>
   <section class="poll-create__btn">
-    <label v-html="getOptionLimit"></label>
+    <h5 v-html="getOptionLimitMessage"></h5>
     <button @click="resetPoll" class="btn btn-primary reset" aria-label="Reset">
       Reset
     </button>
@@ -78,7 +75,16 @@ export default {
     ...mapActions(["addPoll", "removePollOption", "resetPoll"]),
   },
   computed: {
-    ...mapGetters(["getOptionLimit", "getQuestion"]),
+    ...mapGetters([
+      "getOptionLimitMessage",
+      "getQuestion",
+      "getOptions",
+      "getOptionsLength",
+      "getAllowedOptionLimit",
+      "getCharacterLength",
+      "getOptionInput",
+      "getQuestionInput",
+    ]),
   },
 };
 </script>
