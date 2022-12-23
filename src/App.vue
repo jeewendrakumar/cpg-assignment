@@ -68,7 +68,7 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: rgb(204 204 204 / 30%);
+  background: #fff;
   margin: 0;
   padding: 0;
   height: 100%;

@@ -4,7 +4,10 @@
     <BarChart :optionsList="getOptions" :pollResult="getSubmittedVotesList" />
   </section>
   <section class="total-votes">
-    <h5 v-bind:innerHTML="getTotalVotesMessage"></h5>
+    <h6
+      class="alert alert-info m-0 p-2"
+      v-bind:innerHTML="getTotalVotesMessage"
+    ></h6>
   </section>
 </template>
 

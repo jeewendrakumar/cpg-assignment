@@ -45,6 +45,7 @@ ChartJS.register(
 export default {
   name: "BarChart",
   components: { Bar },
+  emits: ["total-votes"],
   props: ["optionsList", "pollResult"],
   data() {
     return {
@@ -55,6 +56,18 @@ export default {
           x: {
             grid: {
               drawOnChartArea: false,
+            },
+            ticks: {
+              callback: function (label) {
+                if (/\s/.test(label)) {
+                  return label.split(" ");
+                } else {
+                  return label;
+                }
+              },
+              font: {
+                weight: "bold",
+              },
             },
           },
           y: {

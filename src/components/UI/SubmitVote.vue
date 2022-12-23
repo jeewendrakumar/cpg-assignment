@@ -2,7 +2,7 @@
   <form class="poll-form" @submit.prevent="addVote(selectedOption)">
     <h5 class="card-title">{{ getQuestion }}</h5>
     <section class="cb-height poll-section">
-      <transition-group name="list" tag="p">
+      <transition-group name="list">
         <div
           class="form-check list-item"
           v-for="option in getOptions"
@@ -26,6 +26,7 @@
         'vote-btn-right': true,
       }"
     >
+      <label></label>
       <button
         type="submit"
         :class="{
@@ -60,6 +61,10 @@ export default {
 };
 </script>
 <style scoped>
+.list-item {
+  font-size: larger;
+  margin-top: 22px;
+}
 .vote-btn {
   display: flex;
 }
