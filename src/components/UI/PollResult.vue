@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import BarChart from "../charts/BarChart.vue";
+import BarChart from "../Charts/BarChart.vue";
 import { mapGetters } from "vuex";
 export default {
   components: { BarChart },
