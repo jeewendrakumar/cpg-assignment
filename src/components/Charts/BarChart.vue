@@ -58,13 +58,6 @@ export default {
               drawOnChartArea: false,
             },
             ticks: {
-              callback: function (label) {
-                if (/\s/.test(label)) {
-                  return label.split(" ");
-                } else {
-                  return label;
-                }
-              },
               font: {
                 weight: "bold",
               },
